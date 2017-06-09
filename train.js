@@ -37,17 +37,19 @@ $('#addTrain').on('click', function(event){
 	database.ref().set({
 		trainName: trainName,
 		destination: destination,
-		firstTrainTime: firstTrainTime,
-		frequency: frequency
+		frequency: frequency,		
+		nextArrival: nextArrival,
+		minutesAway: minutesAway
 	});
 
 	// After button press operations, clear the form fields
 	$('.form-control').val('');
 		
-	// Dynamically update the page by adding new rows per user submit form click
+	// Dynamically updates the page by adding new rows per user submit form click
 	function addTrainRow(){
 		var newRow = $('<tr>')
 		newRow.attr('class', 'newRowColor');
+		newRow.attr('id', 'newRow')
 		var a = $('<td>');
 		a.html(trainName);
 		newRow.append(a);
@@ -68,6 +70,15 @@ $('#addTrain').on('click', function(event){
 
 	addTrainRow();
 
-});
+}); // End of onclick event handler
+
+// database.ref().on('value', function(snapshot){
+// 	$('.newRow').html(snapshot.val('#newRow'));
+
+// }, function(errorObject) {
+
+//       console.log("Errors handled: " + errorObject.code);
+
+// });
 
 	      
