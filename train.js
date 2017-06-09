@@ -12,28 +12,28 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
+// Take user data from form
 $('#addTrain').on('click', function(event){
 	event.preventDefault();
 
 	var trainName = $('#trainName').val().trim();
 	var destination = $('#destination').val().trim();
-	var firstTrainTime = moment($('#firstTrainTime').val().trim(), "HH:mm").format("HH:mm");
+	var firstTrainTime = moment($('#firstTrainTime').val().trim(), 'hh:mm').format('HH:mm');
 	var frequency = $('#frequency').val().trim();
 
-	// var freq
-	var nextArrival = 0;
+	// Hardest part, ensure compared time comes before first train time
+	var refPoint = moment(firstTrainTime, 'hh:mm').subtract(1, 'years');
 
-	var firstTimeConverted = moment(firstTrainTime, "hh:mm").subtract(1, "years");
-    console.log(firstTimeConverted);
+	// Math logic
+	// current time - first train time = time since first train
+	// time since first train % frequency = time into current route
+	// frequency - time into current route = minutes away
+	// current time + minutes away = next arrival
+	var minutesAway = frequency - ((moment().diff(moment(refPoint), 'minutes')) % frequency);
+	var nextArrivalMinutes = moment().add(minutesAway, 'minutes');
+	var nextArrival = moment(nextArrivalMinutes).format('hh:mm');
 
-    var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
-
-    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-    console.log("DIFFERENCE IN TIME: " + diffTime);
-
-	var minutesAway = moment();
-
+	// Push data to firebase
 	database.ref().set({
 		trainName: trainName,
 		destination: destination,
@@ -41,8 +41,10 @@ $('#addTrain').on('click', function(event){
 		frequency: frequency
 	});
 
+	// After button press operations, clear the form fields
 	$('.form-control').val('');
 		
+	// Dynamically update the page by adding new rows per user submit form click
 	function addTrainRow(){
 		var newRow = $('<tr>')
 		newRow.attr('class', 'newRowColor');
@@ -60,9 +62,10 @@ $('#addTrain').on('click', function(event){
 		newRow.append(d);
 		var e = $('<td>');
 		e.html(minutesAway);
+		newRow.append(e);
 		$('#theTable tr:last').after(newRow);
 	}
-	console.log(firstTrainTime);
+
 	addTrainRow();
 
 });
