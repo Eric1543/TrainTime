@@ -34,7 +34,7 @@ $('#addTrain').on('click', function(event){
 	var nextArrival = moment(nextArrivalMinutes).format('hh:mm');
 
 	// Push data to firebase
-	database.ref().set({
+	database.ref().push({
 		trainName: trainName,
 		destination: destination,
 		frequency: frequency,		
