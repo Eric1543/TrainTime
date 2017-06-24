@@ -44,9 +44,6 @@ $('#addTrain').on('click', function(event){
 
 	// After button press operations, clear the form fields
 	$('.form-control').val('');
-		
-	// Dynamically updates the page by adding new rows per user submit form click
-	
 	
 }); // End of onclick event handler
 
@@ -80,27 +77,4 @@ database.ref().on('child_added', function(snapshot){
 	}
 
 addTrainRow();
-// 	$('#rowHeader').after($('#newRow'));
-	// for(var i = 0; i < database.ref().length; i++){
-	// 	console.log("In loop " + key)
-	// 	$('#newRow').after(childSnapshot.val().trainName);
-	// 	$('#showTrainName').after(childSnapshot.val().destination);
-	// 	$('#showDestination').after(childSnapshot.val().frequency);
-	// 	$('#showFrequency').after(childSnapshot.val().nextArrival);
-	// 	$('#showNextArrival').after(childSnapshot.val().minutesAway);
-	// }
-
 })
-
-// database.ref().on('child_added', function(snapshot){
-
-// 	snapshot.forEach(function(childSnap){
-// 		$('#newRow1').after(childSnap.val());
-// 		console.log(childSnap.val());
-// 	})
-
-// }, function(errorObject) {
-//       console.log("Errors handled: " + errorObject.code);
-// });
-
-	      
