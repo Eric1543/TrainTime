@@ -34,7 +34,7 @@ $('#addTrain').on('click', function(event){
 	var nextArrival = moment(nextArrivalMinutes).format('hh:mm');
 
 	// Push data to firebase
-	database.ref().set({
+	database.ref().push({
 		trainName: trainName,
 		destination: destination,
 		frequency: frequency,		
@@ -46,39 +46,61 @@ $('#addTrain').on('click', function(event){
 	$('.form-control').val('');
 		
 	// Dynamically updates the page by adding new rows per user submit form click
+	
+	
+}); // End of onclick event handler
+
+database.ref().on('child_added', function(snapshot){
+	console.log(snapshot.val());
 	function addTrainRow(){
 		var newRow = $('<tr>')
 		newRow.attr('class', 'newRowColor');
 		newRow.attr('id', 'newRow')
 		var a = $('<td>');
-		a.html(trainName);
+		a.html(snapshot.val().trainName);
+		a.attr('id', 'showTrainName');
 		newRow.append(a);
 		var b = $('<td>');
-		b.html(destination);
+		b.html(snapshot.val().destination);
+		b.attr('id', 'showDestination');
 		newRow.append(b);
 		var c = $('<td>');
-		c.html(frequency);
+		c.html(snapshot.val().frequency);
+		c.attr('id', 'showFrequency');
 		newRow.append(c);
 		var d = $('<td>');
-		d.html(nextArrival);
+		d.html(snapshot.val().nextArrival);
+		d.attr('id', 'showNextArrival');
 		newRow.append(d);
 		var e = $('<td>');
-		e.html(minutesAway);
+		e.html(snapshot.val().minutesAway);
+		e.attr('id', 'showMinutesAway');
 		newRow.append(e);
 		$('#theTable tr:last').after(newRow);
 	}
 
-	addTrainRow();
+addTrainRow();
+// 	$('#rowHeader').after($('#newRow'));
+	// for(var i = 0; i < database.ref().length; i++){
+	// 	console.log("In loop " + key)
+	// 	$('#newRow').after(childSnapshot.val().trainName);
+	// 	$('#showTrainName').after(childSnapshot.val().destination);
+	// 	$('#showDestination').after(childSnapshot.val().frequency);
+	// 	$('#showFrequency').after(childSnapshot.val().nextArrival);
+	// 	$('#showNextArrival').after(childSnapshot.val().minutesAway);
+	// }
 
-}); // End of onclick event handler
+})
 
-// database.ref().on('value', function(snapshot){
-// 	$('.newRow').html(snapshot.val('#newRow'));
+// database.ref().on('child_added', function(snapshot){
+
+// 	snapshot.forEach(function(childSnap){
+// 		$('#newRow1').after(childSnap.val());
+// 		console.log(childSnap.val());
+// 	})
 
 // }, function(errorObject) {
-
 //       console.log("Errors handled: " + errorObject.code);
-
 // });
 
 	      
